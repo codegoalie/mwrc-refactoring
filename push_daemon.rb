@@ -1,5 +1,7 @@
 require './worker'
 require './udp_server'
+require './jobs/ping'
+require './jobs/send'
 
 class PushDaemon
   def initialize
@@ -15,13 +17,9 @@ class PushDaemon
   def call(data)
     case data[0].split.first
     when 'PING'
-      @server.send('PONG', data[1][3], data[1][1])
+      Jobs::Ping.new(data, @server).run
     when 'SEND'
-      data[0][5..-1].match(/([a-zA-Z0-9_\-]*) "([^"]*)/)
-      json = JSON.generate({
-        "registration_ids" => [$1],
-        "data" => { "alert" => $2 }
-      })
+      json = Jobs::Send.new(data, @server).run
       @worker << json
     end
   end
