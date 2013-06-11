@@ -1,6 +1,7 @@
 require './worker'
 require './udp_server'
 require './jobs'
+require './client'
 
 class PushDaemon
   def initialize
@@ -13,8 +14,8 @@ class PushDaemon
     @server.listen(6889)
   end
 
-  def call(data)
-    job = Jobs.factory(data, @server)
+  def call(client, message)
+    job = Jobs.factory(client, message)
 
     if job
       @worker << job

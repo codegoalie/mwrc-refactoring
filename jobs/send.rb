@@ -6,13 +6,12 @@ module Jobs
       @client ||= HTTPClient.new
     end
 
-    def initialize(data, server)
-      @data = data
-      @server = server
+    def initialize(client, message)
+      @message = message
     end
 
     def run
-      @data[0][5..-1].match(/([a-zA-Z0-9_\-]*) "([^"]*)/)
+      @message[5..-1].match(/([a-zA-Z0-9_\-]*) "([^"]*)/)
 
       json = JSON.generate({
         "registration_ids" => [$1],

@@ -1,12 +1,12 @@
 module Jobs
   class Ping
-    def initialize(data, server)
-      @data = data
-      @server = server
+    def initialize(client, message)
+      @client = client
+      @message = message
     end
 
     def run
-      @server.send('PONG', @data[1][3], @data[1][1])
+      @client.send('PONG')
     end
   end
 end
