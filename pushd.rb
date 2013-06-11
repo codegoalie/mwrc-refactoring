@@ -1,5 +1,4 @@
 require 'thread'
-require 'httpclient'
 require 'json'
 
 require './push_daemon'
