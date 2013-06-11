@@ -1,25 +1,28 @@
 require './worker'
-require './udp_server'
 
 class PushDaemon
   def initialize
     @worker = Worker.new
-    @server = UDPServer.new
+    @socket = UDPSocket.new
   end
 
   def start
     @worker.spawn(10)
-    @server.bind(6889)
+    bind
     loop { process_request }
   end
 
   private
 
+    def bind
+      @socket.bind("0.0.0.0", 6889)
+    end
+
     def process_request
-      data = @server.receive
+      data = @socket.recvfrom(4096)
       case data[0].split.first
       when 'PING'
-        @server.send('PONG', data[1][3], data[1][1])
+        @socket.send('PONG', 0, data[1][3], data[1][1])
       when 'SEND'
         data[0][5..-1].match(/([a-zA-Z0-9_\-]*) "([^"]*)/)
         json = JSON.generate({
