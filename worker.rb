@@ -4,22 +4,22 @@ class Worker
     @client = HTTPClient.new
   end
 
-  def <<(json)
-    @queue << json
+  def <<(job)
+    @queue << job
   end
 
   def spawn(count)
     count.times do
-      Thread.new do
-        while true
-          data = @queue.pop
-          @client.post('https://android.googleapis.com/send', data, {
-            "Authorization" => "key:AIzaSyCABSTd47XeIH",
-            "Content-Type" => "application/josn"
-          })
-        end
-      end
+      Thread.new { work  }
     end
   end
+
+  private
+
+    def work
+      while job = @queue.pop
+        job.run
+      end
+    end
 end
 
