@@ -19,9 +19,7 @@ class PushDaemon
     request = Request.new(message)
     job = Jobs.factory(client, request)
 
-    if job
-      @worker << job
-    end
+    @worker << job
   end
 end
 
