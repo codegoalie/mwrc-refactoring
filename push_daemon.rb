@@ -19,7 +19,7 @@ class PushDaemon
     request = Request.new(message)
     job = Jobs.factory(client, request)
 
-    @worker << job
+    job >> @worker
   end
 end
 

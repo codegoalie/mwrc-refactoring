@@ -8,5 +8,9 @@ module Jobs
     def run
       @client.send('PONG')
     end
+
+    def >>(worker)
+      worker << self
+    end
   end
 end
