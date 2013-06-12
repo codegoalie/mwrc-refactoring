@@ -1,9 +1,8 @@
-module Jobs
-  class NullJob
-    def initialize(client, request)
-    end
+require './jobs/job'
 
-    def run
+module Jobs
+  class NullJob < Job
+    def initialize(client, request)
     end
 
     def >>(worker)

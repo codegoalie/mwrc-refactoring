@@ -1,18 +1,10 @@
 require './push_notification'
+require './jobs/job'
 
 module Jobs
-  class Send
-    def initialize(client, request)
-      @client = client
-      @request = request
-    end
-
+  class Send < Job
     def run
       PushNotification.new(registration_id, alert).deliver
-    end
-
-    def >>(worker)
-      worker << self
     end
 
     private
