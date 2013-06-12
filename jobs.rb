@@ -1,5 +1,6 @@
 require './jobs/ping'
 require './jobs/send'
+require './jobs/null_job'
 
 module Jobs
   JOBS = {
@@ -7,11 +8,9 @@ module Jobs
     'SEND' => Send
   }
 
-  def self.factory(client, request)
-    klass = JOBS[request.command]
+  JOBS.default = NullJob
 
-    if klass
-      klass.new(client, request)
-    end
+  def self.factory(client, request)
+    JOBS[request.command].new(client, request)
   end
 end
